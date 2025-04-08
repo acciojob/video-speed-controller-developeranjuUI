@@ -14,7 +14,7 @@
     </div>
   </div> -->
 	<div class="player">
-    <video class="flex viewer" width="765" height="430" src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" controls></video>
+    <video class="flex player__video" width="765" height="430" src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4" controls></video>
 
     <div class="controls">
       <button class="player__button toggle">►</button>
@@ -33,7 +33,7 @@
 <script  src="./script.js">
   //Your code goes here
 const player = document.querySelector('.player');
-const video = player.querySelector('.viewer');
+const video = player.querySelector('.player__video');
 const toggle = player.querySelector('.toggle');
 const skipButtons = player.querySelectorAll('[data-skip]');
 const volumeSlider = player.querySelector('input[name="volume"]');
