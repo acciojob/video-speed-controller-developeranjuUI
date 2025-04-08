@@ -1,16 +1,50 @@
-const speed = document.querySelector('.speed');
-const speedBar = document.querySelector('.speed-bar');
-const video = document.querySelector('video');
+const player = document.querySelector('.player');
+const video = player.querySelector('.viewer');
+const toggle = player.querySelector('.toggle');
+const skipButtons = player.querySelectorAll('[data-skip]');
+const volumeSlider = player.querySelector('input[name="volume"]');
+const speedSlider = player.querySelector('input[name="playbackSpeed"]');
+const progress = player.querySelector('.progress');
+const progressBar = player.querySelector('.progress__filled');
 
-speed.addEventListener('mousemove', function (e) {
-  const y = e.pageY - this.offsetTop;
-  const percent = y / this.offsetHeight;
-  const min = 0.4;
-  const max = 4;
-  const height = Math.round(percent * 100) + '%';
-  const playbackRate = percent * (max - min) + min;
+function togglePlay() {
+  const method = video.paused ? 'play' : 'pause';
+  video[method]();
+}
 
-  speedBar.style.height = height;
-  speedBar.textContent = playbackRate.toFixed(2) + '×';
-  video.playbackRate = playbackRate;
-});
+function updateButton() {
+  toggle.textContent = video.paused ? '►' : '❚ ❚';
+}
+
+function skip() {
+  video.currentTime += parseFloat(this.dataset.skip);
+}
+
+function handleVolume() {
+  video.volume = this.value;
+}
+
+function handleSpeed() {
+  video.playbackRate = this.value;
+}
+
+function handleProgress() {
+  const percent = (video.currentTime / video.duration) * 100;
+  progressBar.style.flexBasis = `${percent}%`;
+}
+
+function scrub(e) {
+  const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
+  video.currentTime = scrubTime;
+}
+
+video.addEventListener('click', togglePlay);
+video.addEventListener('play', updateButton);
+video.addEventListener('pause', updateButton);
+video.addEventListener('timeupdate', handleProgress);
+
+toggle.addEventListener('click', togglePlay);
+skipButtons.forEach(button => button.addEventListener('click', skip));
+volumeSlider.addEventListener('input', handleVolume);
+speedSlider.addEventListener('input', handleSpeed);
+progress.addEventListener('click', scrub);
